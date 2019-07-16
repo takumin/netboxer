@@ -5,6 +5,7 @@ import (
 	"github.com/digitalocean/go-netbox/netbox/client"
 	"github.com/digitalocean/go-netbox/netbox/client/dcim"
 	"github.com/digitalocean/go-netbox/netbox/models"
+	"github.com/gosimple/slug"
 )
 
 // SiteName Site Name
@@ -39,14 +40,20 @@ func (n *NetBoxer) getSites() error {
 }
 
 // Sites Declare
-func (n *NetBoxer) Sites(req *models.Site) error {
+func (n *NetBoxer) Sites(req *string) error {
 	n.getSites()
 
-	if _, ok := n.sites[SiteName(*req.Name)]; ok {
+	if _, ok := n.sites[SiteName(*req)]; ok {
 		return nil
 	}
 
-	res, err := n.client.Dcim.DcimSitesCreate(nil, nil)
+	slugReq := slug.Make(*req)
+	res, err := n.client.Dcim.DcimSitesCreate(
+		dcim.NewDcimSitesCreateParams().
+			WithData(&models.WritableSite{
+				Name: req,
+				Slug: &slugReq,
+			}), nil)
 	if err != nil {
 		return err
 	}
