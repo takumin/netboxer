@@ -9,6 +9,13 @@ const (
 	defaultAPIToken    = "0123456789abcdef0123456789abcdef01234567"
 )
 
+var (
+	name    = "netboxer"
+	version = "unknown"
+	commit  = "unknown"
+	date    = "unknown"
+)
+
 func main() {
 	netboxer.NewNetboxer(defaultEndpointURL, defaultAPIToken)
 }
