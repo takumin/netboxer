@@ -4,6 +4,7 @@ before:
     - go generate ./...
 builds:
 - binary: netboxer
+  main: ./cmd/netboxer/main.go
   goos:
   - windows
   - darwin
