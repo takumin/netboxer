@@ -18,7 +18,7 @@ type NetBoxer struct {
 func NewNetboxer(endpointUrl, apiToken string) *NetBoxer {
 	n := &NetBoxer{}
 	n.client = netbox.NewNetboxWithAPIKey(endpointUrl, apiToken)
-	n.sites = make(map[NetBoxerSiteID]*models.Site)
+	n.sites = make(map[SiteID]*models.Site)
 	n.getSites()
 	return n
 }
