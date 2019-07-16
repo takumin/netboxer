@@ -9,7 +9,8 @@ type NetBoxer struct {
 	client *client.NetBox
 }
 
-func NewNetboxer(endpointUrl, apiToken string) (client *NetBoxer) {
-	client.client = netbox.NewNetboxWithAPIKey(endpointUrl, apiToken)
-	return client
+func NewNetboxer(endpointUrl, apiToken string) *NetBoxer {
+	return &NetBoxer{
+		client: netbox.NewNetboxWithAPIKey(endpointUrl, apiToken),
+	}
 }
