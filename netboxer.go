@@ -4,20 +4,22 @@ import (
 	"github.com/digitalocean/go-netbox/netbox"
 	"github.com/digitalocean/go-netbox/netbox/client"
 	"github.com/digitalocean/go-netbox/netbox/models"
-	"github.com/takumin/netboxer"
 )
 
+// SiteID Site ID
 type SiteID int64
 
+// NetBoxer Client
 type NetBoxer struct {
 	client *client.NetBox
 
 	sites map[SiteID]*models.Site
 }
 
-func NewNetboxer(endpointUrl, apiToken string) *NetBoxer {
+// NewNetboxer New Client
+func NewNetboxer(endpointURL, apiToken string) *NetBoxer {
 	n := &NetBoxer{}
-	n.client = netbox.NewNetboxWithAPIKey(endpointUrl, apiToken)
+	n.client = netbox.NewNetboxWithAPIKey(endpointURL, apiToken)
 	n.sites = make(map[SiteID]*models.Site)
 	n.getSites()
 	return n
