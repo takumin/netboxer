@@ -39,10 +39,10 @@ func (n *NetBoxer) getSites() error {
 }
 
 // Sites Declare
-func (n *NetBoxer) Sites(name SiteName) error {
+func (n *NetBoxer) Sites(req *models.Site) error {
 	n.getSites()
 
-	if _, ok := n.sites[name]; ok {
+	if _, ok := n.sites[SiteName(*req.Name)]; ok {
 		return nil
 	}
 
