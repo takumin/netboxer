@@ -15,6 +15,12 @@ builds:
   env:
   - GO111MODULE=on
   - CGO_ENABLED=0
+  ldflags:
+  - -s -w
+  - -X "main.name={{.ProjectName}}"
+  - -X "main.version={{.Version}}"
+  - -X "main.commit={{.FullCommit}}"
+  - -X "main.date={{.Date}}"
 checksum:
   algorithm: sha256
 archives:
