@@ -1,0 +1,22 @@
+before:
+  hooks:
+    - go mod download
+    - go generate ./...
+builds:
+- binary: netboxer
+  goos:
+  - windows
+  - darwin
+  - linux
+  goarch:
+  - amd64
+  - arm64
+  env:
+  - GO111MODULE=on
+  - CGO_ENABLED=0
+checksum:
+  algorithm: sha256
+archives:
+- format_overrides:
+  - goos: windows
+    format: zip
