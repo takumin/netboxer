@@ -7,12 +7,12 @@ import (
 	"github.com/takumin/netboxer"
 )
 
-type NetBoxerSiteID int64
+type SiteID int64
 
 type NetBoxer struct {
 	client *client.NetBox
 
-	sites map[NetBoxerSiteID]*models.Site
+	sites map[SiteID]*models.Site
 }
 
 func NewNetboxer(endpointUrl, apiToken string) *NetBoxer {
@@ -30,7 +30,7 @@ func (n *NetBoxer) getSites() error {
 	}
 
 	for _, v := range res.Payload.Results {
-		n.sites[NetBoxerSiteID(v.ID)] = v
+		n.sites[SiteID(v.ID)] = v
 	}
 
 	return nil
