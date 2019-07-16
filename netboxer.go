@@ -3,25 +3,25 @@ package netboxer
 import (
 	"github.com/digitalocean/go-netbox/netbox"
 	"github.com/digitalocean/go-netbox/netbox/client"
+	"github.com/digitalocean/go-netbox/netbox/client/dcim"
 	"github.com/digitalocean/go-netbox/netbox/models"
 )
 
-// SiteID Site ID
-type SiteID int64
+// SiteName Site Name
+type SiteName string
 
 // NetBoxer Client
 type NetBoxer struct {
 	client *client.NetBox
 
-	sites map[SiteID]*models.Site
+	sites map[SiteName]*models.Site
 }
 
 // NewNetboxer New Client
 func NewNetboxer(endpointURL, apiToken string) *NetBoxer {
 	n := &NetBoxer{}
 	n.client = netbox.NewNetboxWithAPIKey(endpointURL, apiToken)
-	n.sites = make(map[SiteID]*models.Site)
-	n.getSites()
+	n.sites = make(map[SiteName]*models.Site)
 	return n
 }
 
@@ -32,8 +32,35 @@ func (n *NetBoxer) getSites() error {
 	}
 
 	for _, v := range res.Payload.Results {
-		n.sites[SiteID(v.ID)] = v
+		n.sites[SiteName(*v.Name)] = v
 	}
+
+	return nil
+}
+
+// Sites Declare
+func (n *NetBoxer) Sites(name SiteName) error {
+	n.getSites()
+
+	if _, ok := n.sites[name]; ok {
+		return nil
+	}
+
+	res, err := n.client.Dcim.DcimSitesCreate(nil, nil)
+	if err != nil {
+		return err
+	}
+
+	param := &dcim.DcimSitesReadParams{
+		ID: res.Payload.ID,
+	}
+
+	site, err := n.client.Dcim.DcimSitesRead(param, nil)
+	if err != nil {
+		return err
+	}
+
+	n.sites[SiteName(*site.Payload.Name)] = site.Payload
 
 	return nil
 }
