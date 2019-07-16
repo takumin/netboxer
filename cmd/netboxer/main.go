@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+
 	"github.com/takumin/netboxer"
 )
 
@@ -17,5 +19,11 @@ var (
 )
 
 func main() {
-	netboxer.NewNetboxer(defaultEndpointURL, defaultAPIToken)
+	var (
+		site string
+	)
+	flag.StringVar(&site, "Site", "", "NetBox Site")
+	flag.Parse()
+	netbox := netboxer.NewNetboxer(defaultEndpointURL, defaultAPIToken)
+	netbox.Sites(site)
 }

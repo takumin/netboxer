@@ -1,6 +1,8 @@
 package netboxer
 
 import (
+	"errors"
+
 	"github.com/digitalocean/go-netbox/netbox"
 	"github.com/digitalocean/go-netbox/netbox/client"
 	"github.com/digitalocean/go-netbox/netbox/client/dcim"
@@ -40,18 +42,22 @@ func (n *NetBoxer) getSites() error {
 }
 
 // Sites Declare
-func (n *NetBoxer) Sites(req *string) error {
+func (n *NetBoxer) Sites(req string) error {
+	if req == "" {
+		return errors.New("Require Site Name")
+	}
+
 	n.getSites()
 
-	if _, ok := n.sites[SiteName(*req)]; ok {
+	if _, ok := n.sites[SiteName(req)]; ok {
 		return nil
 	}
 
-	slugReq := slug.Make(*req)
+	slugReq := slug.Make(req)
 	res, err := n.client.Dcim.DcimSitesCreate(
 		dcim.NewDcimSitesCreateParams().
 			WithData(&models.WritableSite{
-				Name: req,
+				Name: &req,
 				Slug: &slugReq,
 			}), nil)
 	if err != nil {
